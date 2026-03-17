@@ -714,9 +714,9 @@ function launchBirthday() {
   overlay.innerHTML = `
     <div class="bday-scene">
       <div class="confetti-wrap" id="confetti-wrap"></div>
-      <div class="bday-msg">🎂 Happy Birthday, Christine! 🎂</div>
+      <div class="bday-msg">🎂 Happy 40th Birthday, Christine! 🎂</div>
       <div class="bday-sub">Love, Peter</div>
-      <img class="bday-cake-gif" src="https://media0.giphy.com/media/TRlPpAV3UuIg0/giphy.gif" alt="Birthday cake">
+      <img class="bday-cake-gif" src="FKCake.gif" alt="FKK with birthday cake">
       <div class="bday-time">${timeStr}</div>
       <div class="bday-hint">Click anywhere to dismiss</div>
     </div>`;
