@@ -421,6 +421,41 @@ function handleArrowKey(key) {
     }
   }
 
+  // Detect word boundaries
+  const atStartAcross = key === 'ArrowLeft'  && (col === 0 || state.grid[row][col-1].isBlack);
+  const atEndAcross   = key === 'ArrowRight' && (col === state.width - 1 || state.grid[row][col+1].isBlack);
+  const atStartDown   = key === 'ArrowUp'    && (row === 0 || state.grid[row-1][col].isBlack);
+  const atEndDown     = key === 'ArrowDown'  && (row === state.height - 1 || state.grid[row+1][col].isBlack);
+
+  if (atStartAcross || atStartDown) {
+    // Jump to last open cell of the previous clue
+    const clues = orderedClues();
+    const g = state.grid[row][col];
+    const curNum = keyDir === 'across' ? g.acrossClueNumber : g.downClueNumber;
+    const curIdx = clues.findIndex(c => c.number === curNum && c.direction === keyDir);
+    const prev = clues[(curIdx - 1 + clues.length) % clues.length];
+    const cells = prev.cells;
+    let target = cells[cells.length - 1];
+    for (let i = cells.length - 1; i >= 0; i--) {
+      if (!state.entries[cells[i].row][cells[i].col]) { target = cells[i]; break; }
+    }
+    moveCursor(target.row, target.col, prev.direction);
+    return;
+  }
+
+  if (atEndAcross || atEndDown) {
+    // Jump to first open cell of the next clue
+    const clues = orderedClues();
+    const g = state.grid[row][col];
+    const curNum = keyDir === 'across' ? g.acrossClueNumber : g.downClueNumber;
+    const curIdx = clues.findIndex(c => c.number === curNum && c.direction === keyDir);
+    const next = clues[(curIdx + 1) % clues.length];
+    const cells = next.cells;
+    const target = cells.find(cell => !state.entries[cell.row][cell.col]) || cells[0];
+    moveCursor(target.row, target.col, next.direction);
+    return;
+  }
+
   // Move one step
   let nr = row, nc = col;
   if (key === 'ArrowLeft')  nc--;
