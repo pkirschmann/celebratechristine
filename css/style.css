@@ -10,7 +10,7 @@
   --color-correct-dot: #2ECC71;
   --toolbar-height: 48px;
   --cluebar-height: 36px;
-  --font-main: 'Helvetica Neue', Arial, sans-serif;
+  --font-main: 'Libre Franklin', 'Helvetica Neue', Arial, sans-serif;
   --border-color: #333;
   --bg-page: #f8f8f8;
   --bg-toolbar: #fff;
@@ -55,7 +55,7 @@ body {
 }
 
 #puzzle-title {
-  font-size: 15px;
+  font-size: 28px;
   font-weight: 700;
   text-align: center;
   flex: 1;
@@ -229,7 +229,7 @@ body {
   top: 1px;
   left: 2px;
   font-size: 9px;
-  font-weight: 600;
+  font-weight: 300;
   line-height: 1;
   color: #222;
   pointer-events: none;
@@ -263,7 +263,7 @@ body {
 
 #clue-panel h3 {
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #888;
@@ -297,7 +297,7 @@ body {
 
 .clue-num {
   flex-shrink: 0;
-  font-weight: 700;
+  font-weight: 600;
   min-width: 24px;
   text-align: right;
   color: #444;
