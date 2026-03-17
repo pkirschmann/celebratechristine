@@ -431,6 +431,13 @@ function orderedClues() {
   return [...across, ...down];
 }
 
+function firstUnfilledCell(clue) {
+  for (const { row, col } of clue.cells) {
+    if (!state.entries[row][col]) return { row, col };
+  }
+  return null;
+}
+
 function navigateToNextClue() {
   const { row, col, direction } = state.cursor;
   const g = state.grid[row][col];
@@ -438,6 +445,20 @@ function navigateToNextClue() {
 
   const clues = orderedClues();
   const idx = clues.findIndex(c => c.number === curNum && c.direction === direction);
+
+  // Find the next incomplete clue
+  for (let i = 1; i <= clues.length; i++) {
+    const candidate = clues[(idx + i) % clues.length];
+    if (candidate && candidate.cells.length) {
+      const unfilled = firstUnfilledCell(candidate);
+      if (unfilled) {
+        moveCursor(unfilled.row, unfilled.col, candidate.direction);
+        return;
+      }
+    }
+  }
+
+  // Puzzle fully filled — fall back to simple next clue
   const next = clues[(idx + 1) % clues.length];
   if (next && next.cells.length) {
     moveCursor(next.cells[0].row, next.cells[0].col, next.direction);
@@ -451,6 +472,20 @@ function navigateToPrevClue() {
 
   const clues = orderedClues();
   const idx = clues.findIndex(c => c.number === curNum && c.direction === direction);
+
+  // Find the previous incomplete clue
+  for (let i = 1; i <= clues.length; i++) {
+    const candidate = clues[(idx - i + clues.length) % clues.length];
+    if (candidate && candidate.cells.length) {
+      const unfilled = firstUnfilledCell(candidate);
+      if (unfilled) {
+        moveCursor(unfilled.row, unfilled.col, candidate.direction);
+        return;
+      }
+    }
+  }
+
+  // Puzzle fully filled — fall back to simple prev clue
   const prev = clues[(idx - 1 + clues.length) % clues.length];
   if (prev && prev.cells.length) {
     moveCursor(prev.cells[0].row, prev.cells[0].col, prev.direction);
@@ -714,9 +749,9 @@ function launchBirthday() {
   overlay.innerHTML = `
     <div class="bday-scene">
       <div class="confetti-wrap" id="confetti-wrap"></div>
-      <div class="bday-msg">🎂 Happy 40th Birthday, Christine! 🎂</div>
+      <div class="bday-msg">🎂 Happy Birthday, Christine! 🎂</div>
       <div class="bday-sub">Love, Peter</div>
-      <img class="bday-cake-gif" src="FKCake.gif" alt="FKK with birthday cake">
+      <img class="bday-cake-gif" src="https://media0.giphy.com/media/TRlPpAV3UuIg0/giphy.gif" alt="Birthday cake">
       <div class="bday-time">${timeStr}</div>
       <div class="bday-hint">Click anywhere to dismiss</div>
     </div>`;
