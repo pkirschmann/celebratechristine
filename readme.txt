@@ -77,6 +77,13 @@ Cursor & Navigation
   - advanceCursor(): after writing a letter, moves to the next empty cell in
     the word; if the word is complete, jumps to first empty cell of the next
     incomplete clue (cycles through all clues in across-then-down order)
+  - Arrow key boundary navigation (handleArrowKey in app.js):
+      ← at the start of an across word → last open cell of previous clue
+      ↑ at the top of a down word      → last open cell of previous clue
+      → at the end of an across word   → first open cell of next clue
+      ↓ at the end of a down word      → first open cell of next clue
+    Clue order wraps around (← at clue 1-Across → last Down clue).
+    "Open" means empty/unfilled; falls back to the boundary cell if all filled.
 
 Input Modes
   - Ink mode (default): normal black letters
