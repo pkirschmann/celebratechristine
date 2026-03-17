@@ -373,7 +373,8 @@ function advanceCursor() {
   const { row, col, direction } = state.cursor;
   const word = state.activeWord;
   const idx = word.findIndex(p => p.row === row && p.col === col);
-  // Advance to next empty cell, or last cell
+
+  // Advance to next empty cell in the current word
   for (let i = idx + 1; i < word.length; i++) {
     const { row: nr, col: nc } = word[i];
     if (!state.entries[nr][nc]) {
@@ -381,10 +382,20 @@ function advanceCursor() {
       return;
     }
   }
-  // Just advance one if all filled
-  if (idx + 1 < word.length) {
-    const { row: nr, col: nc } = word[idx + 1];
-    moveCursor(nr, nc, direction);
+
+  // No empty cells remaining in this word — move to next clue that has empty cells
+  const clues = orderedClues();
+  const g = state.grid[row][col];
+  const curNum = direction === 'across' ? g.acrossClueNumber : g.downClueNumber;
+  const curIdx = clues.findIndex(c => c.number === curNum && c.direction === direction);
+
+  for (let i = 1; i <= clues.length; i++) {
+    const next = clues[(curIdx + i) % clues.length];
+    const firstEmpty = next.cells.find(({ row: r, col: c }) => !state.entries[r][c]);
+    if (firstEmpty) {
+      moveCursor(firstEmpty.row, firstEmpty.col, next.direction);
+      return;
+    }
   }
 }
 
