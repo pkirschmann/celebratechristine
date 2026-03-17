@@ -246,8 +246,7 @@ body {
 
 .cell-pencil .cell-letter {
   color: var(--color-pencil-text);
-  font-style: italic;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 /* ── Clue panel ─────────────────────────────────────────────────────── */

@@ -84,10 +84,12 @@ Cursor & Navigation
       ↓ at the end of a down word      → first open cell of next clue
     Clue order wraps around (← at clue 1-Across → last Down clue).
     "Open" means empty/unfilled; falls back to the boundary cell if all filled.
+  - Backspace at the first cell of a word when already blank → jumps to the
+    last cell of the previous clue (same wrap-around order as arrow boundaries)
 
 Input Modes
   - Ink mode (default): normal black letters
-  - Pencil mode: grey italic letters, toggled via toolbar ✏️ button
+  - Pencil mode: grey, light-weight (300) letters, toggled via toolbar ✏️ button
   - Mobile: a hidden off-screen <input> captures touch keyboard input
 
 Check / Reveal

@@ -571,11 +571,26 @@ function handleKeydown(e) {
         state.cellStatus[row][col] = null;
         renderCell(row, col);
       } else {
-        retreatCursor();
-        const { row: pr, col: pc } = state.cursor;
-        state.entries[pr][pc] = null;
-        state.cellStatus[pr][pc] = null;
-        renderCell(pr, pc);
+        // Check if we're at the first cell of the current word
+        const atWordStart = state.activeWord.length > 0 &&
+          state.activeWord[0].row === row && state.activeWord[0].col === col;
+        if (atWordStart) {
+          // Jump to the last cell of the previous clue
+          const clues = orderedClues();
+          const g = state.grid[row][col];
+          const curNum = direction === 'across' ? g.acrossClueNumber : g.downClueNumber;
+          const curIdx = clues.findIndex(c => c.number === curNum && c.direction === direction);
+          const prev = clues[(curIdx - 1 + clues.length) % clues.length];
+          const cells = prev.cells;
+          const target = cells[cells.length - 1];
+          moveCursor(target.row, target.col, prev.direction);
+        } else {
+          retreatCursor();
+          const { row: pr, col: pc } = state.cursor;
+          state.entries[pr][pc] = null;
+          state.cellStatus[pr][pc] = null;
+          renderCell(pr, pc);
+        }
       }
       break;
     case 'Delete':
